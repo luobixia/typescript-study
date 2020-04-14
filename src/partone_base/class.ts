@@ -1,7 +1,12 @@
 abstract class Animal {
+  //抽象类中可以定义一个方法，它可以有具体的实现，这样子类就不用实现了，实现了方法的复用
   eat() {
       console.log('eat')
   }
+  //抽象类中可以不指定方法的具体实现，这就构成了抽象方法
+  //抽象方法的好处是你明确知道子类可以有其它的实现，那么就没有必要在父类中实现了
+  //抽象类的好处是可以抽离出一些实物的共性，有利于代码的复用和扩展，另外抽象类也可以实现多态，所谓多态就是在父类
+  //中我们定义一个抽象方法，在多个子类中对这个方法有不同的实现，在程序运行的时候会根据不同的对象执行不同的操作，实现了运行时的绑定
   abstract sleep(): void
 }
 // let animal = new Animal()
@@ -25,6 +30,7 @@ class Dog extends Animal {
   readonly legs: number = 4
   // 类的静态成员只能通过类名来进行调用，而不能通过子类来调用
   static food: string = 'bones'
+  //在子类中实现抽象方法
   sleep() {
       console.log('Dog sleep')
   }
@@ -35,7 +41,7 @@ let dog = new Dog('wangwang')
 // dog.pri() 类的私有成员 只能在类的本身被调用，而不能被类的实例调用，也不能被子类调用
 // dog.pro() 类的私有成员 只能在类的本身被调用，而不能被类的实例调用，也不能被子类调用
 console.log(Dog.food)
-dog.eat()
+dog.eat()//抽象类中可以定义一个方法，它可以有具体的实现，这样子类就不用实现了，实现了方法的复用
 
 // 给constructor加上private则这个类既不能被实例化也不能被继承
 /* class Husky extends Dog {
@@ -71,6 +77,7 @@ class Husky extends Dog {
 }
 console.log(Husky.food)//类的静态成员可以被继承
 
+//多态实现举例
 class Cat extends Animal {
   sleep() {
       console.log('Cat sleep')
@@ -83,6 +90,7 @@ animals.forEach(i => {
   i.sleep()
 })
 
+//特殊的ts类型 this类型 类的成员方法可以直接返回一个this,这样可以很方便的实现链式调用
 class Workflow {
   step1() {
       return this
@@ -93,9 +101,11 @@ class Workflow {
 }
 new Workflow().step1().step2()
 
+//在继承的时候this类型也可以表现出多态，这里的多态是指this即可以是父类型也可以是子类型
 class MyFlow extends Workflow {
   next() {
       return this
   }
 }
+//保证了父类和子类之间接口调用的连贯性
 new MyFlow().next().step1().next().step2()
